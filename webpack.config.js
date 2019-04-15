@@ -7,14 +7,14 @@ const devMode = process.env.NODE_ENV !== 'production'
 module.exports={
     mode: 'development',
     devtool: 'cheap-eval-source-map',
-    entry: ['babel-polyfill','./src/index.ts'],/* 入口文件模块路径 这样会在打包的时候提供一个垫脚片用以兼容低版本浏览器中不支持的API（兼容低版本浏览器的一个方法）*/
+    entry: ['babel-polyfill','./src/index.tsx'],/* 入口文件模块路径 这样会在打包的时候提供一个垫脚片用以兼容低版本浏览器中不支持的API（兼容低版本浏览器的一个方法）*/
     output: {
         filename: '[name].js',
         path: path.resolve(__dirname, 'dist')
     },
     devServer: {
-        contentBase: path.join(__dirname, 'src'),
-        compress: true,
+        // contentBase: path.join(__dirname, 'src'),
+        // compress: true,
         port: 9000,
         open: true,
         hot: true
@@ -22,11 +22,18 @@ module.exports={
     module: {
         rules: [
             {
-                test:/\.ts$/,
+                test:/\.(ts|tsx)$/,
                 exclude:/node_modules/,//排除掉node_module目录
                 use:[
                     'babel-loader',
                     'ts-loader'
+                ]
+            },
+            {
+                test:/\.(js | jsx)$/,
+                exclude:/node_modules/,//排除掉node_module目录
+                use:[
+                    'babel-loader'
                 ]
             },
             {
@@ -45,7 +52,7 @@ module.exports={
     },
     plugins:[
         new HtmlWebpackPlugin({
-            template: './src/index.html'
+            template: './index.html'
         }),
         new CleanWebpackPlugin(),
         new webpack.HotModuleReplacementPlugin(),
